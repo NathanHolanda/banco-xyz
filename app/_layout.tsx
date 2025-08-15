@@ -1,6 +1,9 @@
+import LoginHeader from "@/components/screens/login/Header";
+import { Palette } from "@/constants/Colors";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import "react-native-reanimated";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -13,9 +16,24 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="login" />
-      <Stack.Screen name="home" />
-    </Stack>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Stack
+          screenOptions={{
+            contentStyle: {
+              backgroundColor: Palette.white,
+            },
+          }}
+        >
+          <Stack.Screen
+            name="login"
+            options={{
+              header: LoginHeader,
+            }}
+          />
+          <Stack.Screen name="home" />
+        </Stack>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
