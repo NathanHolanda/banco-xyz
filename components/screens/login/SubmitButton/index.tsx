@@ -1,9 +1,10 @@
 import React from "react";
+import { TouchableOpacityProps } from "react-native";
 import { StyledButton, StyledButtonText } from "./SubmitButton.styles";
 
-export default function SubmitButton() {
+export default function SubmitButton({ ...rest }: TouchableOpacityProps) {
   return (
-    <StyledButton>
+    <StyledButton {...rest}>
       <StyledButtonText>Entrar</StyledButtonText>
     </StyledButton>
   );
