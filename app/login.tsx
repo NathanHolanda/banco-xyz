@@ -1,10 +1,17 @@
+import ContentWrapper from "@/components/ContentWrapper";
+import Input from "@/components/screens/login/Input";
+import SubmitButton from "@/components/screens/login/SubmitButton";
 import React from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 export default function Login() {
   return (
-    <View>
-      <Text>Login</Text>
-    </View>
+    <ContentWrapper>
+      <View style={{ marginBottom: 20 }}>
+        <Input iconName="person" placeholder="E-mail" />
+        <Input iconName="lock" placeholder="Senha" />
+      </View>
+      <SubmitButton />
+    </ContentWrapper>
   );
 }
