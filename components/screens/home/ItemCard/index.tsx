@@ -1,4 +1,4 @@
-import { Palette } from "@/constants/Colors";
+import { Palette } from "@/utils/constants/Colors";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Href, useRouter } from "expo-router";
 import React from "react";

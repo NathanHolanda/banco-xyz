@@ -1,4 +1,4 @@
-import { ContentPadding } from "@/constants/DefaultMeasures";
+import { ContentPadding } from "@/utils/constants/DefaultMeasures";
 import styled from "styled-components/native";
 
 export const StyledItemsContainer = styled.View`

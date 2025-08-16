@@ -1,6 +1,6 @@
 import HomeHeader from "@/components/screens/home/Header";
 import LoginHeader from "@/components/screens/login/Header";
-import { Palette } from "@/constants/Colors";
+import { Palette } from "@/utils/constants/Colors";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import "react-native-reanimated";

@@ -1,4 +1,4 @@
-import { Palette } from "@/constants/Colors";
+import { Palette } from "@/utils/constants/Colors";
 import formatNumberToCurrency from "@/utils/functions/formatNumberToCurrency";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React, { useState } from "react";

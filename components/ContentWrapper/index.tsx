@@ -1,4 +1,4 @@
-import { ContentPadding } from "@/constants/DefaultMeasures";
+import { ContentPadding } from "@/utils/constants/DefaultMeasures";
 import React from "react";
 import { View } from "react-native";
 

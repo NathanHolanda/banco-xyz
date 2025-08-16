@@ -1,5 +1,5 @@
-import { Palette } from "@/constants/Colors";
-import { ContentPadding } from "@/constants/DefaultMeasures";
+import { Palette } from "@/utils/constants/Colors";
+import { ContentPadding } from "@/utils/constants/DefaultMeasures";
 import { Dimensions } from "react-native";
 import styled from "styled-components/native";
 

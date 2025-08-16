@@ -1,4 +1,4 @@
-import { Palette } from "@/constants/Colors";
+import { Palette } from "@/utils/constants/Colors";
 import { Dimensions } from "react-native";
 import styled from "styled-components/native";
 
