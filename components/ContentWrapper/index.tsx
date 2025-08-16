@@ -1,3 +1,4 @@
+import { ContentPadding } from "@/constants/DefaultMeasures";
 import React from "react";
 import { View } from "react-native";
 
@@ -6,5 +7,5 @@ type ContentWrapperProps = {
 };
 
 export default function ContentWrapper({ children }: ContentWrapperProps) {
-  return <View style={{ flex: 1, padding: 20 }}>{children}</View>;
+  return <View style={{ flex: 1, padding: ContentPadding }}>{children}</View>;
 }
