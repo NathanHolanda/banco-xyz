@@ -17,4 +17,6 @@ export const StyledInput = styled.TextInput`
   flex: 1;
   background-color: ${Palette.lightGray};
   font-size: 20px;
+  font-family: Roboto;
+  color: ${Palette.black};
 `;
