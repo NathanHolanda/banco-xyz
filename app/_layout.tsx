@@ -1,3 +1,4 @@
+import HomeHeader from "@/components/screens/home/Header";
 import LoginHeader from "@/components/screens/login/Header";
 import { Palette } from "@/constants/Colors";
 import { useFonts } from "expo-font";
@@ -7,7 +8,9 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
   const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    Roboto: require("../assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
+    "Roboto-SemiBold": require("../assets/fonts/Roboto-SemiBold.ttf"),
   });
 
   if (!loaded) {
@@ -31,7 +34,14 @@ export default function RootLayout() {
               header: LoginHeader,
             }}
           />
-          <Stack.Screen name="home" />
+          <Stack.Screen
+            name="home"
+            options={{
+              header: HomeHeader,
+            }}
+          />
+          <Stack.Screen name="makeTransfer" />
+          <Stack.Screen name="transfersHistory" />
         </Stack>
       </SafeAreaView>
     </SafeAreaProvider>
