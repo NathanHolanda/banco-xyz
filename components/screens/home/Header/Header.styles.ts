@@ -1,4 +1,5 @@
 import { Palette } from "@/constants/Colors";
+import { ContentPadding } from "@/constants/DefaultMeasures";
 import styled from "styled-components/native";
 
 export const StyledHeader = styled.View`
@@ -6,7 +7,7 @@ export const StyledHeader = styled.View`
   height: 200px;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-  padding: 20px;
+  padding: ${ContentPadding}px;
 `;
 
 export const TopContainer = styled.View`
