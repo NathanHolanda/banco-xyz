@@ -1,11 +1,12 @@
 import { Palette } from "@/utils/constants/Colors";
+import IconName from "@/utils/types/IconName";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Href, useRouter } from "expo-router";
 import React from "react";
 import { CardButton, ItemCardText, StyledCard } from "./ItemCard.styles";
 
 type ItemCardProps = {
-  iconName: keyof typeof MaterialIcons.glyphMap;
+  iconName: IconName;
   title: string;
   routeName: Href;
 };

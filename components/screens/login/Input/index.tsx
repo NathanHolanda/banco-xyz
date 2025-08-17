@@ -1,11 +1,12 @@
 import { Palette } from "@/utils/constants/Colors";
+import IconName from "@/utils/types/IconName";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React from "react";
 import { TextInputProps } from "react-native";
 import { StyledInput, StyledInputContainer } from "./Input.styles";
 
 type InputProps = {
-  iconName: keyof typeof MaterialIcons.glyphMap;
+  iconName: IconName;
 } & TextInputProps;
 
 export default function Input({ iconName, ...rest }: InputProps) {
