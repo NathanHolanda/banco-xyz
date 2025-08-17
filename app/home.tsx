@@ -14,7 +14,7 @@ export default function Home() {
           <ItemCard
             iconName="paid"
             title="Fazer uma transferência"
-            routeName="/makeTransfer"
+            routeName="/makeTransfer/payeeData"
           />
           <ItemCard
             iconName="history"
