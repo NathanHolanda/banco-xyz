@@ -5,6 +5,7 @@ export const Palette = {
   white: "#FEFEFE",
   lightGray: "#F5F5F5",
   black: "#0C0C0C",
+  placeholder: "#8C8C8C",
 };
 
 export const Colors = {
