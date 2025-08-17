@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import HomeHeader from "@/components/screens/home/Header";
 import LoginHeader from "@/components/screens/login/Header";
 import { Palette } from "@/utils/constants/Colors";
@@ -26,6 +27,7 @@ export default function RootLayout() {
             contentStyle: {
               backgroundColor: Palette.white,
             },
+            header: Header,
           }}
         >
           <Stack.Screen
@@ -40,7 +42,7 @@ export default function RootLayout() {
               header: HomeHeader,
             }}
           />
-          <Stack.Screen name="makeTransfer" />
+          <Stack.Screen name="makeTransfer" options={{ headerShown: false }} />
           <Stack.Screen name="transfersHistory" />
         </Stack>
       </SafeAreaView>
