@@ -1,3 +1,4 @@
+import { makeServer } from "@/api/miragejs";
 import Header from "@/components/Header";
 import HomeHeader from "@/components/screens/home/Header";
 import LoginHeader from "@/components/screens/login/Header";
@@ -18,6 +19,8 @@ export default function RootLayout() {
     // Async font loading only occurs in development.
     return null;
   }
+
+  makeServer();
 
   return (
     <SafeAreaProvider>
