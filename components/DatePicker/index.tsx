@@ -2,7 +2,7 @@ import { Palette } from "@/utils/constants/Colors";
 import formatDateToRequestBody from "@/utils/functions/formatDateToRequestBody";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { DatePickerText, DatePickerTrigger } from "./DatePicker.styles";
 
@@ -13,7 +13,14 @@ type DatePickerProps = {
 
 export default function DatePicker({ placeholder, onSelect }: DatePickerProps) {
   const [showPicker, setShowPicker] = useState(false);
-  const [value, setValue] = useState<Date>();
+  const [value, setValue] = useState<Date>(new Date());
+  const [isSelectedValueToday, setIsSelectedValueToday] = useState(false);
+
+  useEffect(() => {
+    setIsSelectedValueToday(
+      value.toLocaleDateString() === new Date().toLocaleDateString()
+    );
+  }, [value]);
 
   return (
     <View>
@@ -37,7 +44,8 @@ export default function DatePicker({ placeholder, onSelect }: DatePickerProps) {
           onPress={() => setShowPicker(true)}
         >
           {value
-            ? value.toLocaleDateString()
+            ? value.toLocaleDateString() +
+              (isSelectedValueToday ? " (hoje)" : "")
             : placeholder ?? "Selecione a data..."}
         </DatePickerText>
         <MaterialIcons
