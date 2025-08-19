@@ -65,6 +65,9 @@ export function makeServer({ environment = "development" } = {}) {
         },
       }),
       transfer: Factory.extend({
+        userId() {
+          return _.shuffle([1, 2, 3])[0];
+        },
         value(i) {
           return Math.round(Math.random() * 10000) / 2;
         },
@@ -106,15 +109,40 @@ export function makeServer({ environment = "development" } = {}) {
       });
       this.post("/transfer", (schema, request) => {
         const { requestBody } = request;
-        const { value, currency, payeeDocument, payeeName, transferDate } =
-          JSON.parse(requestBody);
-
-        return schema.create("transfer", {
+        const {
+          userId,
           value,
           currency,
-          date: transferDate,
-          payee: { name: payeeName, document: payeeDocument },
-        });
+          payeeDocument,
+          payeeName,
+          transferDate,
+        } = JSON.parse(requestBody);
+
+        const currentBalanceValue = schema.findBy("balance", {
+          userId,
+        })?.accountBalance;
+
+        if (currentBalanceValue) {
+          const leftBalanceValue = currentBalanceValue - value;
+
+          if (leftBalanceValue >= 0) {
+            schema
+              .findBy("balance", {
+                userId,
+              })
+              ?.update("accountBalance", leftBalanceValue);
+
+            return schema.create("transfer", {
+              userId,
+              value,
+              currency,
+              date: transferDate,
+              payee: { name: payeeName, document: payeeDocument },
+            });
+          }
+        }
+
+        return new Response(400);
       });
 
       this.get("/balance/:userId", (schema, request) => {
