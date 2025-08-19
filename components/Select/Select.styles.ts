@@ -2,8 +2,10 @@ import { Palette } from "@/utils/constants/Colors";
 import { ContentPadding } from "@/utils/constants/DefaultMeasures";
 import styled from "styled-components/native";
 
-export const SelectTrigger = styled.TouchableOpacity`
-  border: 1px solid ${Palette.darkBlue};
+type SelectTriggerProps = { error?: boolean };
+export const SelectTrigger = styled.TouchableOpacity<SelectTriggerProps>`
+  border: 1px solid
+    ${({ error }) => (error ? Palette.errorRed : Palette.darkBlue)};
   background-color: ${Palette.lightGray};
   padding: 12px;
   border-radius: 5px;

@@ -2,6 +2,7 @@ import { Palette } from "@/utils/constants/Colors";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React, { useState } from "react";
 import { FlatList, Modal, TouchableOpacity, View } from "react-native";
+import InputErrorMessage from "../InputErrorMessage";
 import {
   ItemText,
   ModalContent,
@@ -17,6 +18,7 @@ type SelectProps = {
   placeholder?: string;
   options: string[];
   onSelect: (value: string) => void;
+  error?: string;
 };
 
 export default function Select({
@@ -24,6 +26,7 @@ export default function Select({
   placeholder,
   options,
   onSelect,
+  error,
 }: SelectProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [value, setValue] = useState("");
@@ -64,7 +67,8 @@ export default function Select({
           </ModalContent>
         </OverlayContainer>
       </Modal>
-      <SelectTrigger onPress={() => setIsModalVisible(true)}>
+      {!!error && <InputErrorMessage text={error} />}
+      <SelectTrigger error={!!error} onPress={() => setIsModalVisible(true)}>
         <SelectText isPlaceholderText={!value.length}>
           {value.length ? value : placeholder ?? "Selecione..."}
         </SelectText>
