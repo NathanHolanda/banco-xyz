@@ -1,7 +1,16 @@
 import React from "react";
-import { TextInputProps } from "react-native";
+import { TextInputProps, View } from "react-native";
+import InputErrorMessage from "../InputErrorMessage";
 import { StyledInput } from "./Input.styles";
 
-export default function Input({ ...rest }: TextInputProps) {
-  return <StyledInput {...rest} />;
+type InputProps = {
+  error?: string;
+} & TextInputProps;
+export default function Input({ error, ...rest }: InputProps) {
+  return (
+    <View>
+      {!!error && <InputErrorMessage text={error} />}
+      <StyledInput error={!!error} {...rest} />
+    </View>
+  );
 }
