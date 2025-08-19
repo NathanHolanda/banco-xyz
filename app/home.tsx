@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <ContentWrapper>
       <View style={{ gap: 20 }}>
-        <BalanceCard balance={1234.5} />
+        <BalanceCard />
         <ItemsContainer>
           <ItemCard
             iconName="paid"

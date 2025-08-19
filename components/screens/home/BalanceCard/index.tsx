@@ -1,7 +1,9 @@
+import { store } from "@/store";
 import { Palette } from "@/utils/constants/Colors";
 import formatNumberToCurrency from "@/utils/functions/formatNumberToCurrency";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import {
   BalanceAmountContainer,
@@ -14,16 +16,39 @@ import {
 
 const hiddenBalanceText = "••••••";
 
-type BalanceCardProps = {
-  balance: number;
-};
-
-export default function BalanceCard({ balance }: BalanceCardProps) {
-  const money = formatNumberToCurrency(balance, "BRL");
-  const currency = money.split(/\s/)[0];
-  const value = money.split(/\s/)[1];
-
+export default function BalanceCard() {
   const [isBalanceVisible, setBalanceVisible] = useState(false);
+
+  const user = store.getState().user;
+
+  const [value, setValue] = useState<string>();
+  const [currency, setCurrency] = useState<string>();
+
+  const fetchBalanceAmount = async () => {
+    try {
+      const {
+        data: { balance },
+      } = await axios.get(`/api/balance/${user.id}`);
+
+      const money = formatNumberToCurrency(
+        balance.accountBalance,
+        balance.currency
+      );
+
+      const currency = money.split(/\s/)[0];
+      const value = money.split(/\s/)[1];
+
+      setValue(value);
+      setCurrency(currency);
+    } catch (err) {
+      setCurrency("R$");
+      setValue("0,00");
+    }
+  };
+
+  useEffect(() => {
+    fetchBalanceAmount();
+  }, []);
 
   return (
     <StyledBalanceCard>
