@@ -1,10 +1,12 @@
-import { store } from "@/store";
+import { actions, store } from "@/store";
 import { Palette } from "@/utils/constants/Colors";
+import CurrencySymbols from "@/utils/constants/CurrencySymbols";
 import formatNumberToCurrency from "@/utils/functions/formatNumberToCurrency";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
+import { useDispatch } from "react-redux";
 import {
   BalanceAmountContainer,
   BalanceAmountText,
@@ -17,9 +19,11 @@ import {
 const hiddenBalanceText = "••••••";
 
 export default function BalanceCard() {
+  const dispatch = useDispatch();
+
   const [isBalanceVisible, setBalanceVisible] = useState(false);
 
-  const user = store.getState().user;
+  const { user, balance } = store.getState();
 
   const [value, setValue] = useState<string>();
   const [currency, setCurrency] = useState<string>();
@@ -27,19 +31,13 @@ export default function BalanceCard() {
   const fetchBalanceAmount = async () => {
     try {
       const {
-        data: { balance },
+        data: {
+          balance: { accountBalance, currency },
+        },
       } = await axios.get(`/api/balance/${user.id}`);
 
-      const money = formatNumberToCurrency(
-        balance.accountBalance,
-        balance.currency
-      );
-
-      const currency = money.split(/\s/)[0];
-      const value = money.split(/\s/)[1];
-
-      setValue(value);
-      setCurrency(currency);
+      dispatch(actions.setBalance(accountBalance));
+      setCurrency(CurrencySymbols[currency as keyof typeof CurrencySymbols]);
     } catch (err) {
       setCurrency("R$");
       setValue("0,00");
@@ -49,6 +47,18 @@ export default function BalanceCard() {
   useEffect(() => {
     fetchBalanceAmount();
   }, []);
+
+  useEffect(() => {
+    if (balance > 0) {
+      const money = formatNumberToCurrency(balance);
+
+      const currency = money.split(/\s/)[0];
+      const value = money.split(/\s/)[1];
+
+      setCurrency(currency);
+      setValue(value);
+    }
+  }, [balance]);
 
   return (
     <StyledBalanceCard>
