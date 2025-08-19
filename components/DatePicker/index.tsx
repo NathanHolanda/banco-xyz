@@ -9,9 +9,14 @@ import { DatePickerText, DatePickerTrigger } from "./DatePicker.styles";
 type DatePickerProps = {
   placeholder?: string;
   onSelect: (value: string) => void;
+  min?: Date;
 };
 
-export default function DatePicker({ placeholder, onSelect }: DatePickerProps) {
+export default function DatePicker({
+  placeholder,
+  onSelect,
+  min,
+}: DatePickerProps) {
   const [showPicker, setShowPicker] = useState(false);
   const [value, setValue] = useState<Date>(new Date());
   const [isSelectedValueToday, setIsSelectedValueToday] = useState(false);
@@ -24,25 +29,23 @@ export default function DatePicker({ placeholder, onSelect }: DatePickerProps) {
 
   return (
     <View>
-      <DatePickerTrigger>
-        {showPicker && (
-          <RNDateTimePicker
-            mode="date"
-            value={value ?? new Date()}
-            onChange={(_, selectedDate) => {
-              if (selectedDate) {
-                setValue(selectedDate);
-                onSelect(formatDateToRequestBody(selectedDate));
-              }
+      {showPicker && (
+        <RNDateTimePicker
+          minimumDate={min}
+          mode="date"
+          value={value ?? new Date()}
+          onChange={(_, selectedDate) => {
+            if (selectedDate) {
+              setValue(selectedDate);
+              onSelect(formatDateToRequestBody(selectedDate));
+            }
 
-              setShowPicker(false);
-            }}
-          />
-        )}
-        <DatePickerText
-          isPlaceholderText={!value}
-          onPress={() => setShowPicker(true)}
-        >
+            setShowPicker(false);
+          }}
+        />
+      )}
+      <DatePickerTrigger onPress={() => setShowPicker(true)}>
+        <DatePickerText isPlaceholderText={!value}>
           {value
             ? value.toLocaleDateString() +
               (isSelectedValueToday ? " (hoje)" : "")
