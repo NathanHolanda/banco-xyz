@@ -6,6 +6,7 @@ export const Palette = {
   lightGray: "#F5F5F5",
   black: "#0C0C0C",
   placeholder: "#8C8C8C",
+  errorRed: "#992222",
 };
 
 export const Colors = {
