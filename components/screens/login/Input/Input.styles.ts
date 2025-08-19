@@ -1,13 +1,16 @@
 import { Palette } from "@/utils/constants/Colors";
+import { ContentPadding } from "@/utils/constants/DefaultMeasures";
 import styled from "styled-components/native";
 
-export const StyledInputContainer = styled.View`
+type StyledInputContainerProps = { error?: boolean };
+export const StyledInputContainer = styled.View<StyledInputContainerProps>`
   flex-direction: row;
-  border: 2px solid ${Palette.lightBlue};
+  border: 2px solid
+    ${({ error }) => (error ? Palette.errorRed : Palette.lightBlue)};
   border-radius: 5px;
   background-color: ${Palette.lightGray};
   gap: 3px;
-  margin-bottom: 20px;
+  margin-bottom: ${ContentPadding};
   height: 60px;
   align-items: center;
   padding: 0 10px;
@@ -15,7 +18,6 @@ export const StyledInputContainer = styled.View`
 
 export const StyledInput = styled.TextInput`
   flex: 1;
-  background-color: ${Palette.lightGray};
   font-size: 20px;
   font-family: Roboto;
   color: ${Palette.black};
