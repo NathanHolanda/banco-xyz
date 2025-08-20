@@ -9,7 +9,7 @@ import cleanFormattedMoneyValue from "@/utils/functions/cleanFormattedMoneyValue
 import maskMoneyValue from "@/utils/functions/maskMoneyValue";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Formik } from "formik";
-import React from "react";
+import React, { useCallback } from "react";
 import { View } from "react-native";
 import { Toast } from "toastify-react-native";
 import * as Yup from "yup";
@@ -29,27 +29,33 @@ export default function PayeeData() {
       .not(["0", "00"], "Valor inválido!"),
   });
 
-  const checkHasEnoughBalance = (value: string) => {
-    const cleanedValue = cleanFormattedMoneyValue(value);
+  const checkHasEnoughBalance = useCallback(
+    (value: string) => {
+      const cleanedValue = cleanFormattedMoneyValue(value);
 
-    return balance - cleanedValue >= 0;
-  };
+      return balance - cleanedValue >= 0;
+    },
+    [balance]
+  );
 
   type SubmitData = { currency: string; value: string };
-  const onSubmitData = (values: SubmitData) => {
-    if (checkHasEnoughBalance(values.value)) {
-      router.push({
-        pathname: "/makeTransfer/transferDate",
-        params: {
-          payee,
-          value: JSON.stringify({
-            ...values,
-            value: cleanFormattedMoneyValue(values.value),
-          }),
-        },
-      });
-    } else Toast.error("Saldo insuficiente!");
-  };
+  const onSubmitData = useCallback(
+    (values: SubmitData) => {
+      if (checkHasEnoughBalance(values.value)) {
+        router.push({
+          pathname: "/makeTransfer/transferDate",
+          params: {
+            payee,
+            value: JSON.stringify({
+              ...values,
+              value: cleanFormattedMoneyValue(values.value),
+            }),
+          },
+        });
+      } else Toast.error("Saldo insuficiente!");
+    },
+    [checkHasEnoughBalance, payee, router]
+  );
 
   return (
     <ContentWrapper>

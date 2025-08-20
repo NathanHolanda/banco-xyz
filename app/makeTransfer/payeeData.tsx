@@ -36,7 +36,10 @@ export default function PayeeData() {
           router.push({
             pathname: "/makeTransfer/valueData",
             params: {
-              payee: JSON.stringify(values),
+              payee: JSON.stringify({
+                ...values,
+                document: values.document.replace(/\D/g, ""),
+              }),
             },
           });
         }}

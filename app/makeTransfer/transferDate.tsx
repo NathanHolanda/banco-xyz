@@ -4,11 +4,12 @@ import DatePicker from "@/components/DatePicker";
 import ScreenTitle from "@/components/ScreenTitle";
 import { actions, store } from "@/store";
 import { ContentPadding } from "@/utils/constants/DefaultMeasures";
+import { schedulePostRequest } from "@/utils/functions/backgroundTask";
 import formatDateToRequestBody from "@/utils/functions/formatDateToRequestBody";
 import axios from "axios";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Formik } from "formik";
-import React from "react";
+import React, { useCallback } from "react";
 import { View } from "react-native";
 import { useDispatch } from "react-redux";
 import { Toast } from "toastify-react-native";
@@ -23,33 +24,44 @@ export default function TransferDate() {
   const params = useLocalSearchParams<{ payee: string; value: string }>();
 
   type SubmitData = { date: string };
-  const onSubmitData = async (values: SubmitData) => {
-    const { payee, value } = params;
-    const payeeData = JSON.parse(payee);
-    const valueData = JSON.parse(value);
+  const onSubmitData = useCallback(
+    async (values: SubmitData) => {
+      const { payee, value } = params;
+      const payeeData = JSON.parse(payee);
+      const valueData = JSON.parse(value);
 
-    const data = {
-      userId: user.id,
-      payeeName: payeeData.name,
-      payeeDocument: payeeData.document,
-      currency: valueData.currency,
-      value: valueData.value,
-      transferDate: values.date,
-    };
+      const data = {
+        userId: user.id,
+        payeeName: payeeData.name,
+        payeeDocument: payeeData.document,
+        currency: valueData.currency,
+        value: valueData.value,
+        transferDate: values.date,
+      };
 
-    try {
-      await axios.post("/api/transfer", data);
+      const isScheduledToday =
+        new Date(values.date).toLocaleDateString() ===
+        new Date().toLocaleDateString();
 
-      dispatch(actions.setBalance(balance - valueData.value));
+      try {
+        if (isScheduledToday) {
+          await axios.post("/api/transfer", data);
 
-      router.replace("/home");
-      router.back();
+          dispatch(actions.setBalance(balance - valueData.value));
+        } else await schedulePostRequest(data, "/api/transfer", values.date);
 
-      Toast.success("Transferência realizada com sucesso!");
-    } catch (err) {
-      Toast.error("Desculpe, houve um erro no servidor!");
-    }
-  };
+        router.replace("/home");
+        router.back();
+
+        if (isScheduledToday)
+          Toast.success("Transferência realizada com sucesso!");
+        else Toast.info("Sua transferência foi agendada!");
+      } catch (err) {
+        Toast.error("Desculpe, houve um erro no servidor!");
+      }
+    },
+    [balance, dispatch, params, router, user.id]
+  );
 
   return (
     <ContentWrapper>
