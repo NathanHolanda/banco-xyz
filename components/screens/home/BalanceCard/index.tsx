@@ -1,10 +1,11 @@
 import { actions, store } from "@/store";
 import { Palette } from "@/utils/constants/Colors";
 import CurrencySymbols from "@/utils/constants/CurrencySymbols";
+import { processScheduledRequests } from "@/utils/functions/backgroundTask";
 import formatNumberToCurrency from "@/utils/functions/formatNumberToCurrency";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { useDispatch } from "react-redux";
 import {
@@ -28,7 +29,7 @@ export default function BalanceCard() {
   const [value, setValue] = useState<string>();
   const [currency, setCurrency] = useState<string>();
 
-  const fetchBalanceAmount = async () => {
+  const fetchBalanceAmount = useCallback(async () => {
     try {
       const {
         data: {
@@ -42,10 +43,12 @@ export default function BalanceCard() {
       setCurrency("R$");
       setValue("0,00");
     }
-  };
+  }, [dispatch, user.id]);
 
   useEffect(() => {
-    fetchBalanceAmount();
+    processScheduledRequests().then(async () => {
+      await fetchBalanceAmount();
+    });
   }, []);
 
   useEffect(() => {
@@ -66,7 +69,7 @@ export default function BalanceCard() {
       <BalanceContainer>
         <BalanceAmountContainer>
           <CurrencySymbolText>{currency}</CurrencySymbolText>
-          <BalanceAmountText>
+          <BalanceAmountText testID="balance-value">
             {isBalanceVisible ? hiddenBalanceText : value}
           </BalanceAmountText>
         </BalanceAmountContainer>
