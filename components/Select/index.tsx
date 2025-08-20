@@ -1,17 +1,10 @@
 import { Palette } from "@/utils/constants/Colors";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React, { useState } from "react";
-import { FlatList, Modal, TouchableOpacity, View } from "react-native";
+import { FlatList, TouchableOpacity, View } from "react-native";
 import InputErrorMessage from "../InputErrorMessage";
-import {
-  ItemText,
-  ModalContent,
-  ModalContentHeader,
-  ModalContentHeaderTitle,
-  OverlayContainer,
-  SelectText,
-  SelectTrigger,
-} from "./Select.styles";
+import Modal from "../Modal";
+import { ItemText, SelectText, SelectTrigger } from "./Select.styles";
 
 type SelectProps = {
   title?: string;
@@ -33,40 +26,30 @@ export default function Select({
 
   return (
     <View>
-      <Modal animationType="fade" transparent={true} visible={isModalVisible}>
-        <OverlayContainer onTouchEnd={() => setIsModalVisible(false)}>
-          <ModalContent onTouchEnd={(e) => e.stopPropagation()}>
-            <ModalContentHeader>
-              <ModalContentHeaderTitle>
-                {title ?? "Selecione a opção"}
-              </ModalContentHeaderTitle>
+      <Modal
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        title={title ?? "Selecione a opção"}
+        content={
+          <FlatList
+            data={options}
+            renderItem={({ item }) => (
               <TouchableOpacity
-                style={{ marginLeft: "auto" }}
-                onPress={() => setIsModalVisible(false)}
+                onPress={() => {
+                  setValue(item);
+                  onSelect(item);
+
+                  setIsModalVisible(false);
+                }}
               >
-                <MaterialIcons name="close" color={Palette.black} size={30} />
+                <ItemText>{item}</ItemText>
               </TouchableOpacity>
-            </ModalContentHeader>
+            )}
+            keyExtractor={(_, i) => `option-${i}`}
+          />
+        }
+      />
 
-            <FlatList
-              data={options}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => {
-                    setValue(item);
-                    onSelect(item);
-
-                    setIsModalVisible(false);
-                  }}
-                >
-                  <ItemText>{item}</ItemText>
-                </TouchableOpacity>
-              )}
-              keyExtractor={(_, i) => `option-${i}`}
-            />
-          </ModalContent>
-        </OverlayContainer>
-      </Modal>
       {!!error && <InputErrorMessage text={error} />}
       <SelectTrigger error={!!error} onPress={() => setIsModalVisible(true)}>
         <SelectText isPlaceholderText={!value.length}>
