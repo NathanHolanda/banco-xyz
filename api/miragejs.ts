@@ -156,10 +156,18 @@ export function makeServer({ environment = "development" } = {}) {
         if (!!result.length) return new Response(200, {}, result[0]);
         else return new Response(400);
       });
-      this.get("/transferlist", (schema) => {
-        const transfers: any = schema.all("transfer");
+      this.get("/transferlist/:userId", (schema, request) => {
+        const { params } = request;
+        const { userId } = params;
 
-        if (!!transfers.length) return new Response(200, {}, transfers);
+        const result: any = schema
+          .all("transfer")
+          .filter((item) => item.userId == +userId)
+          .sort(
+            (a, b) => (new Date(b.date) as any) - (new Date(a.date) as any)
+          );
+
+        if (!!result.length) return new Response(200, {}, result);
         else return new Response(400);
       });
 
