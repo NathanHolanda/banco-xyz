@@ -10,20 +10,22 @@ type DatePickerProps = {
   placeholder?: string;
   onSelect: (value: string) => void;
   min?: Date;
+  defaultToday?: boolean;
 };
 
 export default function DatePicker({
   placeholder,
   onSelect,
   min,
+  defaultToday = true,
 }: DatePickerProps) {
   const [showPicker, setShowPicker] = useState(false);
-  const [value, setValue] = useState<Date>(new Date());
+  const [value, setValue] = useState(defaultToday ? new Date() : null);
   const [isSelectedValueToday, setIsSelectedValueToday] = useState(false);
 
   useEffect(() => {
     setIsSelectedValueToday(
-      value.toLocaleDateString() === new Date().toLocaleDateString()
+      value?.toLocaleDateString() === new Date().toLocaleDateString()
     );
   }, [value]);
 
