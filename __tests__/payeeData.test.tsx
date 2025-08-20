@@ -17,15 +17,6 @@ jest.mock("react-redux", () => ({
   useDispatch: () => jest.fn(),
 }));
 
-jest.mock("expo-router", () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    back: jest.fn(),
-  }),
-  useLocalSearchParams: jest.fn(),
-}));
-
 jest.mock("axios", () => ({
   post: jest.fn(() => Promise.resolve()),
 }));
@@ -51,7 +42,12 @@ jest.mock("toastify-react-native", () => ({
 
 const mockPush = jest.fn();
 jest.mock("expo-router", () => ({
-  useRouter: () => ({ push: mockPush }),
+  useRouter: () => ({
+    push: mockPush,
+    replace: jest.fn(),
+    back: jest.fn(),
+  }),
+  useLocalSearchParams: jest.fn(),
 }));
 
 describe("PayeeData Form", () => {

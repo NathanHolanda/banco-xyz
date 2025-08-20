@@ -17,15 +17,6 @@ jest.mock("react-redux", () => ({
   useDispatch: () => jest.fn(),
 }));
 
-jest.mock("expo-router", () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    back: jest.fn(),
-  }),
-  useLocalSearchParams: jest.fn(),
-}));
-
 jest.mock("axios", () => ({
   post: jest.fn(() => Promise.resolve()),
 }));
@@ -43,16 +34,21 @@ jest.mock("@/store", () => ({
 }));
 
 const mockError = jest.fn();
+const mockToast = {
+  success: jest.fn(),
+  error: mockError,
+};
 jest.mock("toastify-react-native", () => ({
-  Toast: {
-    success: jest.fn(),
-    error: mockError,
-  },
+  Toast: mockToast,
 }));
 
 const mockPush = jest.fn();
 jest.mock("expo-router", () => ({
-  useRouter: () => ({ push: mockPush }),
+  useRouter: () => ({
+    push: mockPush,
+    replace: jest.fn(),
+    back: jest.fn(),
+  }),
   useLocalSearchParams: jest.fn().mockReturnValue({
     payee: JSON.stringify({
       name: "João Silva",
@@ -62,13 +58,18 @@ jest.mock("expo-router", () => ({
 }));
 
 describe("ValueData Form", () => {
+  beforeEach(() => {
+    mockPush.mockClear();
+    mockError.mockClear();
+  });
+
   test("Should not navigate to next screen because of empty fields", async () => {
     render(<ValueData />);
     const submitButton = screen.getByTestId("submit-button");
     fireEvent.press(submitButton);
 
     await waitFor(() => {
-      expect(expect(mockPush).not.toHaveBeenCalled());
+      expect(mockPush).not.toHaveBeenCalled();
     });
   });
 
@@ -78,12 +79,39 @@ describe("ValueData Form", () => {
     const valueInput = screen.getByTestId("input-value");
 
     fireEvent.press(currencySelect);
+    await waitFor(async () => {
+      const option = await screen.findAllByTestId("option");
+      expect(option[0]).toBeOnTheScreen();
+      fireEvent(option[0], "press");
+    });
+
     fireEvent.changeText(valueInput, "2000,00");
 
     const submitButton = screen.getByTestId("submit-button");
     fireEvent.press(submitButton);
     await waitFor(() => {
-      expect(expect(mockPush).not.toHaveBeenCalled());
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+  });
+
+  test("Should navigate to next screen successfully", async () => {
+    render(<ValueData />);
+    const currencySelect = screen.getByTestId("select-currency");
+    const valueInput = screen.getByTestId("input-value");
+
+    fireEvent.press(currencySelect);
+    await waitFor(async () => {
+      const option = await screen.findAllByTestId("option");
+      expect(option[0]).toBeOnTheScreen();
+      fireEvent(option[0], "press");
+    });
+
+    fireEvent.changeText(valueInput, "200,00");
+
+    const submitButton = screen.getByTestId("submit-button");
+    fireEvent.press(submitButton);
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalled();
     });
   });
 });

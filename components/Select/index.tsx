@@ -25,6 +25,7 @@ export default function Select({
   options,
   onSelect,
   error,
+  testID,
   ...rest
 }: SelectProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -41,6 +42,7 @@ export default function Select({
             data={options}
             renderItem={({ item }) => (
               <TouchableOpacity
+                testID="option"
                 onPress={() => {
                   setValue(item);
                   onSelect(item);
@@ -59,6 +61,7 @@ export default function Select({
       {!!error && <InputErrorMessage text={error} />}
       <SelectTrigger
         {...rest}
+        testID={testID}
         error={!!error}
         onPress={() => setIsModalVisible(true)}
       >

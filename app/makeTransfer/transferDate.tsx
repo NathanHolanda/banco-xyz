@@ -40,8 +40,7 @@ export default function TransferDate() {
       };
 
       const isScheduledToday =
-        new Date(values.date).toLocaleDateString() ===
-        new Date().toLocaleDateString();
+        values.date === formatDateToRequestBody(new Date());
 
       try {
         if (isScheduledToday) {

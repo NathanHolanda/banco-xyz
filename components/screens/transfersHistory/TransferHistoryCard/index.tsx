@@ -20,7 +20,7 @@ export default function TransferHistoryCard({
   value,
 }: Omit<Transfer, "userId">) {
   return (
-    <StyledCard>
+    <StyledCard testID="transfer-card">
       <PayeeText>Beneficiário</PayeeText>
       <View>
         <DataItem>

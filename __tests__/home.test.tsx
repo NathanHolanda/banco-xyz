@@ -41,20 +41,6 @@ jest.mock("react-redux", () => ({
   useDispatch: () => jest.fn(),
 }));
 
-jest.mock(
-  "@/components/ContentWrapper",
-  () =>
-    ({ children }: any) =>
-      children
-);
-jest.mock(
-  "@/components/screens/home/ItemsContainer",
-  () =>
-    ({ children }: any) =>
-      children
-);
-jest.mock("@/components/screens/home/ItemCard", () => () => null);
-
 describe("Home", () => {
   test("Should display the balance value", async () => {
     render(<Home />);
