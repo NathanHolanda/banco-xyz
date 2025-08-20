@@ -32,6 +32,7 @@ export default function Login() {
       try {
         const { data } = await axios.post("/api/login", {
           ...values,
+          email: values.email.toLocaleLowerCase(),
         });
         dispatch(actions.setUser(data.user));
 
