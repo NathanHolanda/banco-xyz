@@ -53,6 +53,7 @@ export default function PayeeData() {
                 value={values.name}
                 placeholder="Nome do beneficiário"
                 error={errors.name}
+                testID="name-input"
               />
               <Input
                 onChangeText={(text) =>
@@ -61,10 +62,15 @@ export default function PayeeData() {
                 value={values.document}
                 placeholder="CPF do beneficiário"
                 error={errors.document}
+                testID="document-input"
               />
             </View>
             <View style={{ marginTop: "auto" }}>
-              <Button onPress={() => handleSubmit()} label="Próximo" />
+              <Button
+                testID="submit-button"
+                onPress={() => handleSubmit()}
+                label="Próximo"
+              />
             </View>
           </View>
         )}

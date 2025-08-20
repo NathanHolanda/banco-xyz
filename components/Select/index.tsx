@@ -1,7 +1,12 @@
 import { Palette } from "@/utils/constants/Colors";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React, { useState } from "react";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  View,
+} from "react-native";
 import InputErrorMessage from "../InputErrorMessage";
 import Modal from "../Modal";
 import { ItemText, SelectText, SelectTrigger } from "./Select.styles";
@@ -12,7 +17,7 @@ type SelectProps = {
   options: string[];
   onSelect: (value: string) => void;
   error?: string;
-};
+} & TouchableOpacityProps;
 
 export default function Select({
   title,
@@ -20,6 +25,7 @@ export default function Select({
   options,
   onSelect,
   error,
+  ...rest
 }: SelectProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [value, setValue] = useState("");
@@ -51,7 +57,11 @@ export default function Select({
       />
 
       {!!error && <InputErrorMessage text={error} />}
-      <SelectTrigger error={!!error} onPress={() => setIsModalVisible(true)}>
+      <SelectTrigger
+        {...rest}
+        error={!!error}
+        onPress={() => setIsModalVisible(true)}
+      >
         <SelectText isPlaceholderText={!value.length}>
           {value.length ? value : placeholder ?? "Selecione..."}
         </SelectText>

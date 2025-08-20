@@ -79,6 +79,7 @@ export default function PayeeData() {
                 onSelect={(value) => setFieldValue("currency", value)}
                 placeholder="Selecionar moeda"
                 error={errors.currency}
+                testID="select-currency"
               />
               <Input
                 onChangeText={(text) =>
@@ -87,10 +88,15 @@ export default function PayeeData() {
                 value={values.value}
                 placeholder="Valor da transferência"
                 error={errors.value}
+                testID="input-value"
               />
             </View>
             <View style={{ marginTop: "auto" }}>
-              <Button onPress={() => handleSubmit()} label="Próximo" />
+              <Button
+                testID="submit-button"
+                onPress={() => handleSubmit()}
+                label="Próximo"
+              />
             </View>
           </View>
         )}

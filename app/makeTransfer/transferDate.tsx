@@ -86,6 +86,7 @@ export default function TransferDate() {
               <Button
                 onPress={() => handleSubmit()}
                 label="Realizar transferência"
+                testID="submit-button"
               />
             </View>
           </View>

@@ -6,7 +6,7 @@ import { ContentPadding } from "@/utils/constants/DefaultMeasures";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { Formik } from "formik";
-import React from "react";
+import React, { useCallback } from "react";
 import { View } from "react-native";
 import { useDispatch } from "react-redux";
 import { Toast } from "toastify-react-native";
@@ -27,20 +27,23 @@ export default function Login() {
       .required("Senha obrigatória!"),
   });
 
-  const handleSubmitLogin = async (values: LoginRequestBody) => {
-    try {
-      const { data } = await axios.post("/api/login", {
-        ...values,
-      });
-      dispatch(actions.setUser(data.user));
+  const handleSubmitLogin = useCallback(
+    async (values: LoginRequestBody) => {
+      try {
+        const { data } = await axios.post("/api/login", {
+          ...values,
+        });
+        dispatch(actions.setUser(data.user));
 
-      router.replace("/home");
-    } catch (err) {
-      if ((err as AxiosError).status === 401)
-        Toast.error("E-mail ou senha incorretos!");
-      else Toast.error("Desculpe, houve um erro no servidor!");
-    }
-  };
+        router.replace("/home");
+      } catch (err) {
+        if ((err as AxiosError).status === 401)
+          Toast.error("E-mail ou senha incorretos!");
+        else Toast.error("Desculpe, houve um erro no servidor!");
+      }
+    },
+    [dispatch, router]
+  );
 
   return (
     <ContentWrapper>
@@ -54,12 +57,14 @@ export default function Login() {
           <View>
             <View style={{ marginBottom: 60, marginTop: ContentPadding }}>
               <Input
+                testID="input-email"
                 iconName="person"
                 placeholder="E-mail"
                 onChangeText={handleChange("email")}
                 error={errors.email}
               />
               <Input
+                testID="input-password"
                 iconName="lock"
                 placeholder="Senha"
                 onChangeText={handleChange("password")}
@@ -67,7 +72,10 @@ export default function Login() {
                 error={errors.password}
               />
             </View>
-            <SubmitButton onPress={() => handleSubmit()} />
+            <SubmitButton
+              testID="submit-button"
+              onPress={() => handleSubmit()}
+            />
           </View>
         )}
       </Formik>
