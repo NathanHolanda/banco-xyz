@@ -10,7 +10,7 @@ export const StyledInputContainer = styled.View<StyledInputContainerProps>`
   border-radius: 5px;
   background-color: ${Palette.lightGray};
   gap: 3px;
-  margin-bottom: ${ContentPadding};
+  margin-bottom: ${ContentPadding}px;
   height: 60px;
   align-items: center;
   padding: 0 10px;
